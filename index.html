@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -846,3 +847,804 @@
     </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Pull-Up Coach</title>
+    
+    <!-- Bootstrap 5 CSS for grid/layout utility -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Embedded PWA Manifest -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Smart Pull-up Coach","short_name":"Pull-up Coach","start_url":".","display":"standalone","background_color":"#F3F4F6","theme_color":"#4F46E5","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iIzRGNDZFNSIvPjwvc3ZnPg==","sizes":"192x192","type":"image/svg+xml"}]}'>
+
+    <style>
+        /* ==========================================
+           COLOR PSYCHOLOGY & MODERN LIGHT THEME
+           ========================================== */
+        :root {
+            --bg-color: #F3F4F6; /* Soft, calming light gray to prevent pure-white eye strain */
+            --surface-color: #FFFFFF; /* Pure white for elevated elements to create depth */
+            --text-main: #1F2937; /* Very dark gray, softer than pure black */
+            --text-muted: #6B7280; /* Friendly medium gray for secondary info */
+            
+            /* Psychological Colors */
+            --primary: #4F46E5; /* Indigo: Trust, focus, calm energy */
+            --primary-hover: #4338CA;
+            --success: #10B981; /* Emerald: Growth, achievement, health */
+            --warning-soft: #FEF3C7; /* Soft amber: Gentle attention without alarm */
+            --warning-text: #B45309;
+            
+            --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-float: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            touch-action: manipulation; /* Prevents double-tap zoom */
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .view-section {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================
+           UI COMPONENTS (Soft, Tactile, Squicles)
+           ========================================== */
+        
+        /* Floating Cards */
+        .surface-card {
+            background: var(--surface-color);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .goal-card {
+            cursor: pointer;
+        }
+        .goal-card:active {
+            transform: scale(0.98);
+            box-shadow: none;
+            background-color: #F9FAFB;
+        }
+
+        /* Friendly Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: var(--text-main);
+        }
+
+        .text-muted-custom {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Primary CTAs (Massive & Soft) */
+        .btn-massive {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.25rem;
+            font-size: 1.15rem;
+            border-radius: 100px; /* Pill shape */
+            width: 100%;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-massive:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 5px rgba(79, 70, 229, 0.2);
+            background-color: var(--primary-hover);
+        }
+
+        .btn-success-soft {
+            background-color: var(--success);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Tactile Stepper Controls */
+        .stepper-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-color);
+            border-radius: 100px;
+            padding: 0.5rem;
+        }
+
+        .stepper-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--surface-color);
+            color: var(--primary);
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .stepper-btn:active {
+            transform: scale(0.9);
+            background-color: #E5E7EB;
+        }
+
+        .stepper-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            min-width: 80px;
+            text-align: center;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        /* Beautiful Timer */
+        .timer-display {
+            font-size: 6rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--primary);
+            line-height: 1;
+            letter-spacing: -0.05em;
+        }
+
+        .coach-bubble {
+            background-color: #EEF2FF; /* Very soft indigo */
+            color: var(--primary);
+            border-radius: 20px 20px 20px 4px; /* Chat bubble tail effect */
+            padding: 1.25rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        /* Header App Bar */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 2rem 0;
+        }
+        
+        .header-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-reset {
+            background: rgba(0,0,0,0.05);
+            color: var(--text-muted);
+            border: none;
+            border-radius: 100px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container max-w-md mx-auto px-4" style="max-width: 500px;">
+        
+        <!-- Subtle Header -->
+        <div class="app-header">
+            <div class="header-title">🏃‍♂️ Smart Pull-Ups Coach</div>
+            <button class="btn-reset" onclick="resetSession()">Start Over</button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: HOME / GOAL SELECTION              -->
+        <!-- ========================================== -->
+        <section id="view-home" class="view-section active">
+            <h2 class="mb-2">What's your goal today?</h2>
+            <p class="text-muted-custom mb-4">Choose a focus, and I'll handle the math and rest timers for you.</p>
+            
+            <div id="goal-list">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: WARMUP & BASELINE                  -->
+        <!-- ========================================== -->
+        <section id="view-warmup" class="view-section">
+            
+            <!-- Friendly Reminder instead of Warning -->
+            <div class="surface-card" style="background-color: var(--warning-soft); box-shadow: none;">
+                <div class="d-flex align-items-center mb-2">
+                    <span class="fs-3 me-2">👋</span>
+                    <h5 class="mb-0" style="color: var(--warning-text)">Let's get warm</h5>
+                </div>
+                <p class="mb-0" style="color: var(--warning-text); opacity: 0.9;">
+                    Before we start, do 1 or 2 easy sets of 2-3 reps just to wake up your back and shoulders.
+                </p>
+            </div>
+            
+            <div class="surface-card mt-3">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="fs-1 me-3">🎯</span>
+                    <div>
+                        <h4 class="mb-1">Your First Set</h4>
+                        <p class="text-muted-custom mb-0 fs-6">Setting the baseline</p>
+                    </div>
+                </div>
+                <p class="mb-0" style="font-size: 1.05rem; line-height: 1.5;">
+                    Jump on the bar and do as many clean reps as you can. Stop as soon as your form starts to slow down or get sloppy.
+                </p>
+            </div>
+
+            <button class="btn-massive mt-4" onclick="startWorkout()">
+                I'm ready. Let's go!
+            </button>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: ACTIVE SET INPUT                   -->
+        <!-- ========================================== -->
+        <section id="view-active-set" class="view-section">
+            <div class="text-center mb-4">
+                <p class="text-muted-custom fw-bold text-uppercase mb-1">Current Set</p>
+                <h1 style="font-size: 3rem; color: var(--primary);">Set <span id="ui-set-num">1</span></h1>
+                
+                <div class="d-inline-block mt-2 px-4 py-2" style="background: white; border-radius: 100px; box-shadow: var(--shadow-soft);">
+                    <span class="text-muted-custom fw-bold me-2">Target Reps:</span>
+                    <span id="ui-target-reps" class="fw-bold fs-5 text-dark">MAX</span>
+                </div>
+            </div>
+
+            <!-- Beautiful, Tactile Input Cards -->
+            <div class="surface-card">
+                <h5 class="text-center mb-1">Reps Completed</h5>
+                <p class="text-center text-muted-custom small mb-3">How many did you actually do?</p>
+                
+                <div class="stepper-container">
+                    <button class="stepper-btn" onclick="adj('reps', -1)">-</button>
+                    <span id="ui-val-reps" class="stepper-val">0</span>
+                    <button class="stepper-btn" onclick="adj('reps', 1)">+</button>
+                </div>
+            </div>
+
+            <div class="surface-card">
+                <h5 class="text-center mb-1">Reps left in the tank</h5>
+                <p class="text-center text-muted-custom small mb-3">If forced, could you have done more?</p>
+                
+                <div class="stepper-container mb-2">
+                    <button class="stepper-btn" onclick="adj('rir', -1)">-</button>
+                    <span id="ui-val-rir" class="stepper-val">1</span>
+                    <button class="stepper-btn" onclick="adj('rir', 1)">+</button>
+                </div>
+                <div class="text-center mt-3">
+                    <span id="ui-rir-label" class="badge bg-light text-dark px-3 py-2 rounded-pill fw-medium">Maybe 1 more</span>
+                </div>
+            </div>
+
+            <div class="surface-card">
+                <h5 class="text-center mb-1">How did your form feel?</h5>
+                <p class="text-center text-muted-custom small mb-3">Be honest with yourself.</p>
+                
+                <div class="stepper-container mb-2">
+                    <button class="stepper-btn" onclick="adj('form', -1)">-</button>
+                    <span id="ui-val-form" class="stepper-val">3</span>
+                    <button class="stepper-btn" onclick="adj('form', 1)">+</button>
+                </div>
+                <div class="text-center mt-3">
+                    <span id="ui-form-label" class="badge bg-light text-dark px-3 py-2 rounded-pill fw-medium">Strict but slightly slow</span>
+                </div>
+            </div>
+
+            <button class="btn-massive btn-success-soft mt-3" onclick="submitSet()">Log Set & Rest</button>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: REST TIMER                         -->
+        <!-- ========================================== -->
+        <section id="view-rest" class="view-section text-center pt-2">
+            
+            <div class="surface-card mb-4 mt-2">
+                <p class="text-muted-custom fw-bold text-uppercase mb-2">Recovery Time</p>
+                <div class="timer-display mb-3" id="timer-display">0:00</div>
+                
+                <div class="d-flex justify-content-center gap-2 mb-2" id="timer-controls">
+                    <button class="btn btn-light rounded-pill px-4 py-2 fw-bold" style="color: var(--text-muted)" onclick="adjustTimer(-30)">-30s</button>
+                    <button class="btn btn-light rounded-pill px-4 py-2 fw-bold" style="color: var(--text-muted)" onclick="skipTimer()">Skip</button>
+                    <button class="btn btn-light rounded-pill px-4 py-2 fw-bold" style="color: var(--text-muted)" onclick="adjustTimer(30)">+30s</button>
+                </div>
+            </div>
+
+            <!-- Coach's Note -->
+            <div class="text-start mb-4">
+                <span class="fs-5 ms-2 mb-1 d-block">🧔🏻‍♂️ <strong>Coach</strong></span>
+                <div class="coach-bubble" id="rest-analysis">
+                    <!-- Text injected by JS -->
+                </div>
+            </div>
+
+            <div class="surface-card mb-4" style="background: var(--primary); color: white;">
+                <p class="mb-1 opacity-75 fw-medium">Next Set Goal</p>
+                <h3 id="rest-next-target" class="mb-0 text-white" style="font-size: 2rem;">--</h3>
+            </div>
+
+            <button id="btn-next-set" class="btn-massive btn-success-soft d-none" onclick="startNextSet()">
+                Start Next Set
+            </button>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: SUMMARY / SESSION COMPLETE         -->
+        <!-- ========================================== -->
+        <section id="view-summary" class="view-section text-center pt-4">
+            <div style="font-size: 4rem; line-height: 1;" class="mb-2">🎉</div>
+            <h2 class="mb-1">Great Workout!</h2>
+            <p id="summary-reason" class="text-muted-custom mb-4">Reason</p>
+            
+            <div class="surface-card text-start mb-4 bg-white">
+                <p id="summary-details" class="mb-0 fs-5"></p>
+            </div>
+
+            <h5 class="text-start mb-3 ms-1">Session Stats</h5>
+            <div class="row g-3 mb-5 text-start">
+                <div class="col-6">
+                    <div class="surface-card p-3 h-100 m-0">
+                        <div class="fs-3 mb-1">📊</div>
+                        <small class="text-muted-custom d-block fw-bold">Total Reps</small>
+                        <strong class="fs-3" id="stat-volume" style="color: var(--primary)">0</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="surface-card p-3 h-100 m-0">
+                        <div class="fs-3 mb-1">🔄</div>
+                        <small class="text-muted-custom d-block fw-bold">Sets Done</small>
+                        <strong class="fs-3" id="stat-sets" style="color: var(--primary)">0</strong>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="surface-card p-3 h-100 m-0">
+                        <div class="fs-3 mb-1">⭐</div>
+                        <small class="text-muted-custom d-block fw-bold">Avg Form</small>
+                        <strong class="fs-3" id="stat-form" style="color: var(--primary)">0</strong><span class="text-muted-custom">/5</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="surface-card p-3 h-100 m-0">
+                        <div class="fs-3 mb-1">⏱️</div>
+                        <small class="text-muted-custom d-block fw-bold">Time</small>
+                        <strong class="fs-3" id="stat-time" style="color: var(--primary)">0:00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-massive" onclick="resetSession()">
+                Start New Session
+            </button>
+        </section>
+
+    </div>
+
+    <!-- Javascript Logic -->
+    <script>
+        // ==========================================
+        // 1. ENGINE & DATA CONFIG
+        // ==========================================
+        const GOALS = {
+            "1": {
+                icon: "⚡",
+                name: "Strength & Power",
+                rest_multiplier: 1.2,
+                fatigue_threshold: 0.8,
+                description: "Focuses on high quality reps. Longer rests, avoids failure."
+            },
+            "2": {
+                icon: "💪",
+                name: "Muscle Growth (Volume)",
+                rest_multiplier: 1.0,
+                fatigue_threshold: 0.6,
+                description: "Focuses on pushing hard and accumulating total reps."
+            },
+            "3": {
+                icon: "🧘‍♂️",
+                name: "Active Recovery",
+                rest_multiplier: 1.5,
+                fatigue_threshold: 0.9,
+                description: "Keeps the blood flowing. Super light, stops before you get tired."
+            }
+        };
+
+        const RIR_LABELS = {
+            0: "Absolutely 0 left. I was dying.",
+            1: "Maybe 1 more if my life depended on it.",
+            2: "Could definitely do 2 more.",
+            3: "Had 3+ left. Felt pretty easy.",
+            4: "Barely broke a sweat."
+        };
+
+        const FORM_LABELS = {
+            1: "Swinging wildly, total breakdown.",
+            2: "Very sloppy, using momentum.",
+            3: "Strict, but visibly struggling/slow.",
+            4: "Clean and controlled.",
+            5: "Effortless and explosive."
+        };
+
+        function calculateNextSet(reps, rir, form, goalConfig) {
+            let baseRest = 0;
+            let nextReps = reps;
+            let message = "";
+
+            if (form <= 2) {
+                baseRest = 300;
+                nextReps = Math.max(1, reps - 2);
+                message = "Your form broke down a bit there. Take a long, solid breather so we can get it back on track for the next one.";
+            } else if (form <= 3 || rir === 0) {
+                baseRest = 210;
+                nextReps = Math.max(1, reps - 1);
+                message = "You pushed really hard on that set! Fatigue is setting in. Let's drop a rep to keep your form perfectly clean.";
+            } else if (form === 4 || rir === 1) {
+                baseRest = 150;
+                nextReps = reps;
+                message = "Right in the pocket. Great set—your effort and recovery are perfectly balanced. Let's hit that same number again.";
+            } else {
+                baseRest = 90;
+                nextReps = reps + 1;
+                message = "You're moving fast and looking strong! You've got gas in the tank. Let's push the pace a little bit.";
+            }
+
+            let finalRest = Math.floor(baseRest * goalConfig.rest_multiplier);
+            finalRest = Math.min(finalRest, 240); // Cap at 4 minutes for sanity
+            
+            return { restSec: finalRest, nextTarget: nextReps, msg: message };
+        }
+
+        // ==========================================
+        // 2. STATE MANAGEMENT
+        // ==========================================
+        let state = {
+            view: 'view-home',
+            goalId: null,
+            setNum: 1,
+            firstSetReps: 0,
+            targetReps: 'MAX',
+            currentReps: 0,
+            currentRir: 1,
+            currentForm: 3,
+            restEndTime: null,
+            restNextTarget: null,
+            restMsg: null,
+            sessionStartTime: null,
+            totalReps: 0,
+            formScores: []
+        };
+
+        function saveState() {
+            sessionStorage.setItem('smartPullupStateLight', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = sessionStorage.getItem('smartPullupStateLight');
+            if (saved) {
+                state = JSON.parse(saved);
+            }
+        }
+
+        function resetSession() {
+            sessionStorage.removeItem('smartPullupStateLight');
+            releaseWakeLock();
+            if(timerInterval) clearInterval(timerInterval);
+            
+            state = {
+                view: 'view-home',
+                goalId: null,
+                setNum: 1,
+                firstSetReps: 0,
+                targetReps: 'MAX',
+                currentReps: 0,
+                currentRir: 1,
+                currentForm: 3,
+                restEndTime: null,
+                restNextTarget: null,
+                restMsg: null,
+                sessionStartTime: null,
+                totalReps: 0,
+                formScores: []
+            };
+            
+            renderGoals();
+            switchView('view-home');
+            updateUIFromState();
+        }
+
+        // ==========================================
+        // 3. UI CONTROLLER 
+        // ==========================================
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            state.view = viewId;
+            saveState();
+            window.scrollTo(0,0);
+        }
+
+        function renderGoals() {
+            const list = document.getElementById('goal-list');
+            list.innerHTML = '';
+            for (const [id, data] of Object.entries(GOALS)) {
+                list.innerHTML += `
+                    <div class="surface-card goal-card mb-3" onclick="selectGoal('${id}')">
+                        <div class="d-flex align-items-center">
+                            <span style="font-size: 2.5rem; margin-right: 1rem;">${data.icon}</span>
+                            <div>
+                                <h4 class="mb-1" style="color: var(--primary);">${data.name}</h4>
+                                <p class="mb-0 text-muted-custom small" style="line-height: 1.4;">${data.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function selectGoal(id) {
+            state.goalId = id;
+            saveState();
+            switchView('view-warmup');
+        }
+
+        function startWorkout() {
+            state.setNum = 1;
+            state.targetReps = 'MAX';
+            state.currentReps = 0;
+            state.currentRir = 1;
+            state.currentForm = 3;
+            state.sessionStartTime = Date.now();
+            state.totalReps = 0;
+            state.formScores = [];
+            updateUIFromState();
+            switchView('view-active-set');
+        }
+
+        function updateUIFromState() {
+            document.getElementById('ui-set-num').innerText = state.setNum;
+            document.getElementById('ui-target-reps').innerText = state.targetReps;
+            
+            document.getElementById('ui-val-reps').innerText = state.currentReps;
+            
+            // Map Stepper Values to human text
+            document.getElementById('ui-val-rir').innerText = state.currentRir;
+            document.getElementById('ui-rir-label').innerText = RIR_LABELS[Math.min(4, state.currentRir)] || RIR_LABELS[4];
+
+            document.getElementById('ui-val-form').innerText = state.currentForm;
+            document.getElementById('ui-form-label').innerText = FORM_LABELS[state.currentForm];
+        }
+
+        function adj(field, amount) {
+            if (field === 'reps') {
+                state.currentReps = Math.max(0, state.currentReps + amount);
+            } else if (field === 'rir') {
+                state.currentRir = Math.max(0, Math.min(10, state.currentRir + amount));
+            } else if (field === 'form') {
+                state.currentForm = Math.max(1, Math.min(5, state.currentForm + amount));
+            }
+            updateUIFromState();
+            saveState();
+        }
+
+        function submitSet() {
+            const goalConfig = GOALS[state.goalId];
+            const repsDone = state.currentReps;
+            
+            if (state.setNum === 1) {
+                state.firstSetReps = repsDone;
+            }
+
+            state.totalReps += repsDone;
+            state.formScores.push(state.currentForm);
+
+            const result = calculateNextSet(repsDone, state.currentRir, state.currentForm, goalConfig);
+            
+            // Softened stopping logic
+            let fatigueRatio = state.firstSetReps > 0 ? repsDone / state.firstSetReps : 1;
+            let performanceDrop = false;
+
+            if (state.firstSetReps < 5) {
+                performanceDrop = (state.firstSetReps - repsDone) >= 2;
+            } else {
+                performanceDrop = fatigueRatio < goalConfig.fatigue_threshold;
+            }
+
+            if (performanceDrop) {
+                showSummary("Workout complete!", "Your muscles are fatigued to the exact sweet spot for your goal. Doing more sets now will just increase recovery time without adding benefit. Go eat and rest!");
+            } else if (state.currentForm <= 1) {
+                showSummary("Let's call it a day.", "Your form is breaking down, which means your stabilizers are fried. Better to rest up than risk a tweak. Awesome work today.");
+            } else if (state.setNum >= 8) {
+                showSummary("Max Volume Reached", "8 sets is a massive amount of volume! We're capping it here so you can actually recover for your next session.");
+            } else {
+                state.restNextTarget = result.nextTarget;
+                state.restMsg = result.msg;
+                state.restEndTime = Date.now() + (result.restSec * 1000);
+                saveState();
+                
+                startRestPhase();
+            }
+        }
+
+        function showSummary(reason, details) {
+            document.getElementById('summary-reason').innerText = reason;
+            document.getElementById('summary-details').innerHTML = details;
+            
+            document.getElementById('stat-volume').innerText = state.totalReps;
+            document.getElementById('stat-sets').innerText = state.setNum;
+            
+            const avgForm = state.formScores.length > 0 
+                ? state.formScores.reduce((a, b) => a + b, 0) / state.formScores.length 
+                : 0;
+            document.getElementById('stat-form').innerText = avgForm.toFixed(1);
+            
+            const durationSecs = state.sessionStartTime 
+                ? Math.floor((Date.now() - state.sessionStartTime) / 1000) 
+                : 0;
+            const m = Math.floor(durationSecs / 60);
+            const s = durationSecs % 60;
+            document.getElementById('stat-time').innerText = `${m}m ${s}s`;
+
+            switchView('view-summary');
+        }
+
+        // ==========================================
+        // 4. TIMER & WAKELOCK
+        // ==========================================
+        let timerInterval = null;
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) { }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => { wakeLock = null; });
+            }
+        }
+
+        function startRestPhase() {
+            switchView('view-rest');
+            
+            document.getElementById('rest-analysis').innerText = state.restMsg;
+            document.getElementById('rest-next-target').innerText = `Aim for ${state.restNextTarget} Reps`;
+            
+            document.getElementById('btn-next-set').classList.add('d-none');
+            document.getElementById('timer-controls').classList.remove('d-none');
+            document.getElementById('timer-display').style.color = 'var(--primary)';
+            
+            requestWakeLock();
+            
+            if (timerInterval) clearInterval(timerInterval);
+            timerLoop(); 
+            timerInterval = setInterval(timerLoop, 200); 
+        }
+
+        function adjustTimer(seconds) {
+            if (state.restEndTime) {
+                state.restEndTime += (seconds * 1000);
+                timerLoop(); 
+            }
+        }
+
+        function skipTimer() {
+            if (state.restEndTime) {
+                state.restEndTime = Date.now(); 
+                timerLoop();
+            }
+        }
+
+        function timerLoop() {
+            if (!state.restEndTime) return;
+            
+            const remainingSecs = Math.ceil((state.restEndTime - Date.now()) / 1000);
+            
+            if (remainingSecs <= 0) {
+                document.getElementById('timer-display').innerText = "0:00";
+                document.getElementById('timer-display').style.color = 'var(--success)';
+                
+                document.getElementById('timer-controls').classList.add('d-none');
+                document.getElementById('btn-next-set').classList.remove('d-none');
+                
+                clearInterval(timerInterval);
+                releaseWakeLock();
+                playBeep();
+                
+            } else {
+                const m = Math.floor(remainingSecs / 60);
+                const s = remainingSecs % 60;
+                document.getElementById('timer-display').innerText = `${m}:${s.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function startNextSet() {
+            state.setNum += 1;
+            state.targetReps = state.restNextTarget;
+            state.currentReps = state.targetReps;
+            
+            state.restEndTime = null;
+            saveState();
+            
+            updateUIFromState();
+            switchView('view-active-set');
+        }
+
+        function playBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+                osc.stop(ctx.currentTime + 0.5);
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 5. INITIALIZATION
+        // ==========================================
+        window.onload = function() {
+            renderGoals();
+            loadState();
+            updateUIFromState();
+            
+            switchView(state.view);
+            
+            if (state.view === 'view-rest' && state.restEndTime) {
+                startRestPhase(); 
+            }
+        };
+
+        document.addEventListener("visibilitychange", async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                await requestWakeLock();
+            }
+        });
+
+    </script>
+</body>
+
+</html>
+>>>>>>> b3cefbbe8caffd7562830c9854ede498a8cbf7a0
